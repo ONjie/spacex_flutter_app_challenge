@@ -1,0 +1,16 @@
+# Domain Repository Interfaces Directory
+
+This directory should contain your repository interfaces.
+
+## TODO: Implement the following repository interfaces:
+
+- `spacex_repository.dart` - Main SpaceX repository interface
+- `mission_repository.dart` - Mission repository interface
+- `rocket_repository.dart` - Rocket repository interface
+- `launch_repository.dart` - Launch repository interface
+
+Each repository interface should include:
+- Method signatures
+- Return types
+- Parameter definitions
+- Documentation

@@ -1,0 +1,19 @@
+# Use Cases Directory
+
+This directory should contain your business logic use cases.
+
+## TODO: Implement the following use cases:
+
+- `get_missions_use_case.dart` - Get all missions
+- `get_mission_by_id_use_case.dart` - Get mission by ID
+- `get_rockets_use_case.dart` - Get all rockets
+- `get_rocket_by_id_use_case.dart` - Get rocket by ID
+- `get_launches_use_case.dart` - Get all launches
+- `get_upcoming_launches_use_case.dart` - Get upcoming launches
+- `get_past_launches_use_case.dart` - Get past launches
+
+Each use case should include:
+- Business logic
+- Error handling
+- Input validation
+- Single responsibility principle

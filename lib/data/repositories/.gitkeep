@@ -1,0 +1,15 @@
+# Data Repositories Directory
+
+This directory should contain your repository implementations.
+
+## TODO: Implement the following repositories:
+
+- `spacex_repository_impl.dart` - Main SpaceX data repository
+- `local_data_source.dart` - Local data source (SharedPreferences)
+- `remote_data_source.dart` - Remote data source (GraphQL)
+
+Each repository should include:
+- Data fetching logic
+- Error handling
+- Caching strategies
+- Offline support

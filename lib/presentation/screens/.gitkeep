@@ -1,0 +1,22 @@
+# UI Screens Directory
+
+This directory should contain your UI screens.
+
+## TODO: Implement the following screens:
+
+- `home_screen.dart` - Main dashboard/home screen
+- `missions_screen.dart` - Missions list screen
+- `mission_detail_screen.dart` - Mission details screen
+- `rockets_screen.dart` - Rockets list screen
+- `rocket_detail_screen.dart` - Rocket details screen
+- `launches_screen.dart` - Launches list screen
+- `launch_detail_screen.dart` - Launch details screen
+- `search_screen.dart` - Search functionality screen
+- `settings_screen.dart` - Settings screen
+
+Each screen should include:
+- Responsive design
+- Loading states
+- Error handling
+- Smooth animations
+- Accessibility support

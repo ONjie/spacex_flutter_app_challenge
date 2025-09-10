@@ -1,0 +1,17 @@
+# GraphQL Queries Directory
+
+This directory should contain your GraphQL queries for the SpaceX API.
+
+## TODO: Implement the following queries:
+
+- `mission_queries.dart` - Mission-related GraphQL queries
+- `rocket_queries.dart` - Rocket-related GraphQL queries
+- `launch_queries.dart` - Launch-related GraphQL queries
+- `launchpad_queries.dart` - Launchpad-related GraphQL queries
+- `landpad_queries.dart` - Landpad-related GraphQL queries
+
+Each query file should include:
+- Query strings
+- Operation names
+- Variable definitions
+- Documentation

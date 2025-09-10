@@ -1,0 +1,19 @@
+# UI Utilities Directory
+
+This directory should contain your UI utility functions and helpers.
+
+## TODO: Implement the following utilities:
+
+- `responsive_helper.dart` - Responsive design helpers
+- `animation_utils.dart` - Animation utility functions
+- `date_formatter.dart` - Date formatting utilities
+- `image_utils.dart` - Image handling utilities
+- `validation_utils.dart` - Input validation utilities
+- `navigation_utils.dart` - Navigation helper functions
+
+Each utility should include:
+
+- Pure functions
+- Proper error handling
+- Documentation
+- Unit tests (if applicable)

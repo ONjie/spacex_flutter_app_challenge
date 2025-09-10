@@ -1,0 +1,17 @@
+# Data Models Directory
+
+This directory should contain your data models for SpaceX entities.
+
+## TODO: Implement the following models:
+
+- `mission_model.dart` - Mission data model
+- `rocket_model.dart` - Rocket data model  
+- `launch_model.dart` - Launch data model
+- `launchpad_model.dart` - Launchpad data model
+- `landpad_model.dart` - Landpad data model
+
+Each model should include:
+- JSON serialization/deserialization
+- Proper data types
+- Null safety
+- Documentation

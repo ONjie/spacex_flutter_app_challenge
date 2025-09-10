@@ -1,0 +1,17 @@
+# Domain Entities Directory
+
+This directory should contain your business entities.
+
+## TODO: Implement the following entities:
+
+- `mission_entity.dart` - Mission business entity
+- `rocket_entity.dart` - Rocket business entity
+- `launch_entity.dart` - Launch business entity
+- `launchpad_entity.dart` - Launchpad business entity
+- `landpad_entity.dart` - Landpad business entity
+
+Each entity should include:
+- Business logic
+- Validation rules
+- Domain-specific methods
+- Pure Dart classes (no external dependencies)

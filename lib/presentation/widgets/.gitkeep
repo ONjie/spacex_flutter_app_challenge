@@ -1,0 +1,21 @@
+# Reusable Widgets Directory
+
+This directory should contain your reusable UI widgets.
+
+## TODO: Implement the following widgets:
+
+- `spacex_card.dart` - Custom card widget
+- `loading_widget.dart` - Loading indicator widget
+- `error_widget.dart` - Error display widget
+- `mission_card.dart` - Mission card widget
+- `rocket_card.dart` - Rocket card widget
+- `launch_card.dart` - Launch card widget
+- `custom_app_bar.dart` - Custom app bar widget
+- `search_bar.dart` - Search input widget
+- `theme_switcher.dart` - Theme toggle widget
+
+Each widget should include:
+- Reusability
+- Customization options
+- Proper documentation
+- Responsive design
