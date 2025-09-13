@@ -8,7 +8,7 @@ This guide will help you implement the SpaceX Flutter App step by step.
 
 #### 1.1 Data Models
 
-- [ ] Create `Mission` model in `lib/data/models/mission_model.dart`
+- [ ] Create `Capsule` model in `lib/data/models/capsule_model.dart`
 - [ ] Create `Rocket` model in `lib/data/models/rocket_model.dart`
 - [ ] Create `Launch` model in `lib/data/models/launch_model.dart`
 - [ ] Create `Launchpad` model in `lib/data/models/launchpad_model.dart`
@@ -16,7 +16,7 @@ This guide will help you implement the SpaceX Flutter App step by step.
 
 #### 1.2 GraphQL Queries
 
-- [ ] Create mission queries in `lib/data/queries/mission_queries.dart`
+- [ ] Create capsule queries in `lib/data/queries/capsule_queries.dart`
 - [ ] Create rocket queries in `lib/data/queries/rocket_queries.dart`
 - [ ] Create launch queries in `lib/data/queries/launch_queries.dart`
 - [ ] Create launchpad queries in `lib/data/queries/launchpad_queries.dart`
@@ -30,7 +30,7 @@ This guide will help you implement the SpaceX Flutter App step by step.
 
 #### 1.4 State Management
 
-- [ ] Implement `MissionProvider` in `lib/presentation/providers/mission_provider.dart`
+- [ ] Implement `CapsuleProvider` in `lib/presentation/providers/capsule_provider.dart`
 - [ ] Implement `RocketProvider` in `lib/presentation/providers/rocket_provider.dart`
 - [ ] Implement `LaunchProvider` in `lib/presentation/providers/launch_provider.dart`
 
@@ -45,7 +45,7 @@ This guide will help you implement the SpaceX Flutter App step by step.
 #### 2.2 Screens
 
 - [ ] Create `HomeScreen` with overview
-- [ ] Create `MissionsScreen` with list/grid view
+- [ ] Create `CapsulesScreen` with list/grid view
 - [ ] Create `RocketsScreen` with gallery view
 - [ ] Create `LaunchesScreen` with timeline view
 - [ ] Create detail screens for each entity
@@ -100,13 +100,19 @@ This guide will help you implement the SpaceX Flutter App step by step.
 
 ```dart
 // Example structure for models
-class Mission {
+class Capsule {
   final String id;
-  final String name;
-  final String? description;
+  final String type;
+  final String status;
+  final String serial;
+  final int reuseCount;
+  final int waterLandings;
+  final int landLandings;
+  final String? lastUpdate;
+  final List<Launch> launches;
   // ... other fields
 
-  factory Mission.fromJson(Map<String, dynamic> json) {
+  factory Capsule.fromJson(Map<String, dynamic> json) {
     // Implementation
   }
 
@@ -120,14 +126,22 @@ class Mission {
 
 ```dart
 // Example structure for queries
-class MissionQueries {
-  static const String getMissions = '''
-    query GetMissions {
-      missions {
+class CapsuleQueries {
+  static const String getCapsules = '''
+    query GetCapsules {
+      capsules {
         id
-        name
-        description
-        manufacturers
+        type
+        status
+        serial
+        reuse_count
+        water_landings
+        land_landings
+        last_update
+        launches {
+          id
+          name
+        }
       }
     }
   ''';
@@ -138,16 +152,16 @@ class MissionQueries {
 
 ```dart
 // Example structure for providers
-class MissionProvider extends ChangeNotifier {
-  List<Mission> _missions = [];
+class CapsuleProvider extends ChangeNotifier {
+  List<Capsule> _capsules = [];
   bool _isLoading = false;
   String? _error;
 
-  List<Mission> get missions => _missions;
+  List<Capsule> get capsules => _capsules;
   bool get isLoading => _isLoading;
   String? get error => _error;
 
-  Future<void> fetchMissions() async {
+  Future<void> fetchCapsules() async {
     // Implementation
   }
 }
@@ -157,18 +171,18 @@ class MissionProvider extends ChangeNotifier {
 
 ```dart
 // Example structure for repositories
-abstract class MissionRepository {
-  Future<List<Mission>> getMissions();
-  Future<Mission> getMissionById(String id);
+abstract class CapsuleRepository {
+  Future<List<Capsule>> getCapsules();
+  Future<Capsule> getCapsuleById(String id);
 }
 
-class MissionRepositoryImpl implements MissionRepository {
+class CapsuleRepositoryImpl implements CapsuleRepository {
   final GraphQLClient _client;
 
-  MissionRepositoryImpl(this._client);
+  CapsuleRepositoryImpl(this._client);
 
   @override
-  Future<List<Mission>> getMissions() async {
+  Future<List<Capsule>> getCapsules() async {
     // Implementation
   }
 }

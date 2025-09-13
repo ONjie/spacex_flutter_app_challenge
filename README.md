@@ -19,7 +19,7 @@ This repository contains a base Flutter project structure that applicants need t
 
 ### What You'll Build
 
-- A SpaceX mission and rocket explorer app
+- A SpaceX capsule and rocket explorer app
 - Beautiful, space-themed UI with smooth animations
 - GraphQL integration with SpaceX API
 - Clean architecture implementation
@@ -84,7 +84,7 @@ lib/
 
 ### Phase 1: Foundation (Required)
 
-- [ ] **Task 1.1**: Implement data models for SpaceX entities (Mission, Rocket, Launch, etc.)
+- [ ] **Task 1.1**: Implement data models for SpaceX entities (Capsule, Rocket, Launch, etc.)
 - [ ] **Task 1.2**: Create GraphQL queries for SpaceX API
 - [ ] **Task 1.3**: Set up repository pattern and use cases
 - [ ] **Task 1.4**: Implement Provider state management
@@ -93,7 +93,7 @@ lib/
 
 ### Phase 2: Core Features (Required)
 
-- [ ] **Task 2.1**: Build Mission Explorer screen with list/grid view
+- [ ] **Task 2.1**: Build Capsule Explorer screen with list/grid view
 - [ ] **Task 2.2**: Create Rocket Gallery with detailed specifications
 - [ ] **Task 2.3**: Implement Launch Tracker for upcoming/past launches
 - [ ] **Task 2.4**: Add search and filter functionality
@@ -125,7 +125,7 @@ https://spacex-production.up.railway.app/
 
 ### Key Data to Implement
 
-- **Missions**: `missions` query
+- **Capsules**: `capsules` query
 - **Rockets**: `rockets` query
 - **Launches**: `launches` query
 - **Launchpads**: `launchpads` query
@@ -134,13 +134,21 @@ https://spacex-production.up.railway.app/
 ### Sample Queries
 
 ```graphql
-# Get all missions
-query GetMissions {
-  missions {
+# Get all capsules
+query GetCapsules {
+  capsules {
     id
-    name
-    description
-    manufacturers
+    type
+    status
+    serial
+    reuse_count
+    water_landings
+    land_landings
+    last_update
+    launches {
+      id
+      name
+    }
   }
 }
 
