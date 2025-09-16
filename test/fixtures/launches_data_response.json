@@ -1,0 +1,18 @@
+{
+  "data": {
+    "launches": [
+      {
+        "mission_name": "missionName",
+        "upcoming": false,
+        "launch_date_local": "2025-09-15T13:40:44.563985",
+        "id": "id",
+        "details": "details",
+        "rocket": {
+          "rocket_name": "rocketName",
+          "rocket_type": "rocketType"
+        },
+        "launch_year": "launchYear"
+      }
+    ]
+  }
+}

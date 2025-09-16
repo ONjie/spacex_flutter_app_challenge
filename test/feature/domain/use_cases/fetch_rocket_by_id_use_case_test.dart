@@ -1,0 +1,55 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:spacex_flutter_app/domain/entities/rocket_entity.dart';
+import 'package:spacex_flutter_app/domain/repositories/space_x_repository.dart';
+import 'package:spacex_flutter_app/domain/use_cases/fetch_rocket_by_id_use_case.dart';
+
+class MockSpaceXRepository extends Mock implements SpaceXRepository {}
+
+void main() {
+  late FetchRocketByIdUseCase fetchRocketByIdUseCase;
+  late MockSpaceXRepository mockSpacXRepository;
+
+  setUp(() {
+    mockSpacXRepository = MockSpaceXRepository();
+    fetchRocketByIdUseCase =
+        FetchRocketByIdUseCase(spaceXRepository: mockSpacXRepository);
+  });
+
+  final testRocket = RocketEntity(
+    id: 'id',
+    active: false,
+    boosters: 1,
+    company: 'company',
+    costPerLaunch: 100,
+    country: '',
+    description: '',
+    diameterInFeet: 1.0,
+    diameterInMeters: 1.0,
+    firstFlight: DateTime.parse('2025-09-15T13:40:44.563985'),
+    heightInFeet: 1.0,
+    heightInMeters: 1,
+    massInKg: 10,
+    massInLb: 12,
+    name: 'name',
+    stages: 1,
+    successRate: 100,
+    type: 'type',
+  );
+
+  test("should return a RocketEntity when call is successful", () async {
+    //arrange
+    when(() => mockSpacXRepository.fetchRocketById(id: any(named: 'id')))
+        .thenAnswer((_) async => testRocket);
+
+    //act
+    final result = await fetchRocketByIdUseCase.call(id: testRocket.id);
+
+    //assert
+    expect(result, isA<RocketEntity>());
+    expect(result, equals(testRocket));
+    verify(() => mockSpacXRepository.fetchRocketById(id: any(named: 'id')))
+        .called(1);
+    verifyNoMoreInteractions(mockSpacXRepository);
+  });
+}

@@ -1,0 +1,12 @@
+{
+  "data": {
+    "capsules": [
+      {
+        "type": "type",
+        "status": "status",
+        "reuse_count": 1,
+        "id": "id"
+      }
+    ]
+  }
+} 

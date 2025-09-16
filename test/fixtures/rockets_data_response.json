@@ -1,0 +1,32 @@
+{
+  "data": {
+    "rockets": [
+      {
+        "active": false,
+        "boosters": 1,
+        "company": "company",
+        "cost_per_launch": 100,
+        "country": "country",
+        "description": "description",
+        "diameter": {
+          "meters": 1.0,
+          "feet": 2.0
+        },
+        "first_flight": "2025-09-15T13:40:44.563985",
+        "id": "id",
+        "name": "name",
+        "stages": 1,
+        "success_rate_pct": 100,
+        "type": "type",
+        "height": {
+          "meters": 10.0,
+          "feet": 11.0
+        },
+        "mass": {
+          "lb": 30,
+          "kg": 20
+        }
+      }
+    ]
+  }
+}
