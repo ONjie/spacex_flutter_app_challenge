@@ -2,7 +2,7 @@
 // Fetch data about SpaceX rockets
 
 // Get all rockets
-const String getAllRocketsQuery = '''
+const String getRocketsQuery = '''
  query getRockets {
   rockets {
     id

@@ -1,5 +1,6 @@
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:spacex_flutter_app/core/exceptions/exceptions.dart';
 
 class GraphQLService {
   static const String _endpoint = 'https://spacex-production.up.railway.app/';
@@ -26,5 +27,23 @@ class GraphQLService {
       link: _httpLink,
       cache: GraphQLCache(store: InMemoryStore()),
     );
+  }
+
+  // Generic query execution method
+   Future<QueryResult> executeQuery(String query,
+      {Map<String, dynamic>? variables}) async {
+    final options = QueryOptions(
+      document: gql(query),
+      variables: variables ?? {},
+      fetchPolicy: FetchPolicy.networkOnly,
+    );
+
+    final results = await _client.query(options);
+
+    if (results.hasException) {
+      throw GraphQLException(message: results.exception!.graphqlErrors.first.message);
+    }
+
+    return results;
   }
 }
