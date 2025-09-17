@@ -16,8 +16,19 @@ import '../../core/utils/infos/infos.dart';
 import '../../domain/repositories/space_x_repository.dart';
 import '../queries/rocket_queries.dart';
 
+// Implementation of the [SpaceXRepository] interface. 
+// This class acts as the data layer of the application and interacts with:
+// GraphQLService to perform GraphQL queries.
+// NetworkInfo to check network connectivity.
+
+// It returns results wrapped in Either<Failure, T>:
+// Left(Failure) for errors or failures.
+// Right(T) for successful responses.
+
 class SpaceXRepositoryImpl implements SpaceXRepository {
+  // Responsible for checking the device's network connectivity status.
   final NetworkInfo networkInfo;
+  // Service for executing GraphQL queries.
   final GraphQLService graphQLService;
 
   SpaceXRepositoryImpl({
@@ -25,6 +36,13 @@ class SpaceXRepositoryImpl implements SpaceXRepository {
     required this.graphQLService,
   });
 
+  // Fetch a single capsule by its [id].
+
+  // Returns:
+  // Right(CapsuleEntity) on success.
+  // Left(InternetConnectionFailure) if there is no internet connection.
+  // Left(DataNotFoundFailure) if the capsule is not found.
+  // Left(GraphQLFailure) if the GraphQLException occurs.
   @override
   Future<Either<Failure, CapsuleEntity>> fetchCapsuleById(
       {required String id}) async {
@@ -52,6 +70,14 @@ class SpaceXRepositoryImpl implements SpaceXRepository {
     }
   }
 
+
+  // Fetch all capsules.
+
+  // Returns:
+  // Right([CapsuleEntity]) on success.
+  // Left(InternetConnectionFailure) if there is no internet connection.
+  // Left(DataNotFoundFailure) if capsules are not found.
+  // Left(GraphQLFailure) if the GraphQLException occurs.
   @override
   Future<Either<Failure, List<CapsuleEntity>>> fetchCapsules() async {
     if (!await networkInfo.isConnected) {
@@ -79,6 +105,14 @@ class SpaceXRepositoryImpl implements SpaceXRepository {
     }
   }
 
+
+ // Fetch a single launch by its [id].
+
+  // Returns:
+  // Right(LaunchEntity) on success.
+  // Left(InternetConnectionFailure) if there is no internet connection.
+  // Left(DataNotFoundFailure) if the launch is not found.
+  // Left(GraphQLFailure) if the GraphQLException occurs.
   @override
   Future<Either<Failure, LaunchEntity>> fetchLaunchById(
       {required String id}) async {
@@ -106,6 +140,14 @@ class SpaceXRepositoryImpl implements SpaceXRepository {
     }
   }
 
+
+  // Fetch all launches.
+
+  // Returns:
+  // Right([LaunchEntity]) on success.
+  // Left(InternetConnectionFailure) if there is no internet connection.
+  // Left(DataNotFoundFailure) if the launches are not found.
+  // Left(GraphQLFailure) if the GraphQLException occurs.
   @override
   Future<Either<Failure, List<LaunchEntity>>> fetchLaunches() async {
     if (!await networkInfo.isConnected) {
@@ -133,6 +175,14 @@ class SpaceXRepositoryImpl implements SpaceXRepository {
     }
   }
 
+
+ // Fetch a single rocket by its [id].
+
+  // Returns:
+  // Right(RocketEntity) on success.
+  // Left(InternetConnectionFailure) if there is no internet connection.
+  // Left(DataNotFoundFailure) if the rocket is not found.
+  // Left(GraphQLFailure) if the GraphQLException occurs.
   @override
   Future<Either<Failure, RocketEntity>> fetchRocketById({required String id}) async {
      if (!await networkInfo.isConnected) {
@@ -158,6 +208,16 @@ class SpaceXRepositoryImpl implements SpaceXRepository {
       return Left(GraphQLFailure(message: e.message));
     }
   }
+
+
+
+// Fetch all rockets.
+
+  // Returns:
+  // Right([RocketEntity]) on success.
+  // Left(InternetConnectionFailure) if there is no internet connection.
+  // Left(DataNotFoundFailure) if the rockets are not found.
+  // Left(GraphQLFailure) if the GraphQLException occurs.
 
   @override
   Future<Either<Failure, List<RocketEntity>>> fetchRockets() async {
