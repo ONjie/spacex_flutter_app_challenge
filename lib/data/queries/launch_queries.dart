@@ -2,7 +2,7 @@
 // Fetch data about SpaceX launches
 
 //Get all Launches
-const String getLaunchesQuery = r'''
+const String getLaunchesQuery = '''
  query getLaunches {
   launches {
    mission_name
@@ -21,9 +21,9 @@ const String getLaunchesQuery = r'''
 
 
 //Get Launch by its id
-const getLaunchByIdQuery = r'''
- query getLaunchById($id: ID!){
-  launchpad(id: $id){
+const getLaunchByIdQuery = '''
+ query getLaunchById(\$id: ID!){
+  launchpad(id: \$id){
     mission_name
     upcoming
     launch_date_local

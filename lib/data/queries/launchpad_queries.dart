@@ -1,7 +1,7 @@
 // Launchpad queries for SpaceX API
 // Fetch data about SpaceX launchpads
 
-const String getLaunchpadsQuery = r'''
+const String getLaunchpadsQuery = '''
  query getLaunchpads {
   launchpads {
     details
@@ -12,9 +12,9 @@ const String getLaunchpadsQuery = r'''
  }
 ''';
 
-const getLaunchpadByIdQuery = r'''
- query getLaunchpadById($id: ID!){
-  launchpad(id: $id){
+const getLaunchpadByIdQuery = '''
+ query getLaunchpadById(\$id: ID!){
+  launchpad(id: \$id){
     details
     id
     name

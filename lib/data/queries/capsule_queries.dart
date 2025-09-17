@@ -2,7 +2,7 @@
 // Fetch data about SpaceX capsules
 
 //Get All Cpasules
-const String getAllCapsules = r'''
+const String getAllCapsules = '''
   query getCapsules {
     capsules {
       id
@@ -14,9 +14,9 @@ const String getAllCapsules = r'''
 ''';
 
 //Gets Capsule by its id
-const String getCapsuleById = r'''
-  query getCapsule($id: ID!) {
-    capsule(id: $id){
+const String getCapsuleById = '''
+  query getCapsule(\$id: ID!) {
+    capsule(id: \$id){
       id
       reuse_count
       status

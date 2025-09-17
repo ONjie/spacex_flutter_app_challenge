@@ -1,5 +1,7 @@
+import 'package:either_dart/either.dart';
 import 'package:spacex_flutter_app/domain/entities/launch_entity.dart';
 
+import '../../core/failures/failures.dart';
 import '../repositories/space_x_repository.dart';
 
 class FetchLaunchesUseCase {
@@ -7,5 +9,6 @@ class FetchLaunchesUseCase {
 
   FetchLaunchesUseCase({required this.spaceXRepository});
 
-  Future<List<LaunchEntity>> call() async => spaceXRepository.fetchLaunches();
+  Future<Either<Failure, List<LaunchEntity>>> call() async =>
+      spaceXRepository.fetchLaunches();
 }

@@ -1,5 +1,7 @@
+import 'package:either_dart/either.dart';
 import 'package:spacex_flutter_app/domain/entities/capsule_entity.dart';
 
+import '../../core/failures/failures.dart';
 import '../repositories/space_x_repository.dart';
 
 class FetchCapsulesUseCase {
@@ -7,5 +9,5 @@ class FetchCapsulesUseCase {
 
   FetchCapsulesUseCase({required this.spaceXRepository});
 
-  Future<List<CapsuleEntity>> call() async => spaceXRepository.fetchCapsules();
+  Future<Either<Failure, List<CapsuleEntity>>> call() async => spaceXRepository.fetchCapsules();
 }

@@ -1,5 +1,7 @@
+import 'package:either_dart/either.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:spacex_flutter_app/core/failures/failures.dart';
 import 'package:spacex_flutter_app/domain/entities/launch_entity.dart';
 import 'package:spacex_flutter_app/domain/repositories/space_x_repository.dart';
 import 'package:spacex_flutter_app/domain/use_cases/fetch_launch_by_id_use_case.dart';
@@ -27,17 +29,17 @@ void main() {
     upcoming: false,
   );
 
-  test("should return a [LaunchEntity] when call is successful", () async {
+  test("should return a Right(LaunchEntity) when call is successful", () async {
     //arrange
     when(() => mockSpaceXRepository.fetchLaunchById(id: any(named: 'id')))
-        .thenAnswer((_) async => testLaunch);
+        .thenAnswer((_) async => Right(testLaunch));
 
     //act
     final result = await fetchLaunchByIdUseCase.call(id: testLaunch.id);
 
     //assert
-    expect(result, isA<LaunchEntity>());
-    expect(result, equals(testLaunch));
+    expect(result, isA<Right<Failure, LaunchEntity>>());
+    expect(result.right, equals(testLaunch));
     verify(() => mockSpaceXRepository.fetchLaunchById(id: any(named: 'id')))
         .called(1);
     verifyNoMoreInteractions(mockSpaceXRepository);

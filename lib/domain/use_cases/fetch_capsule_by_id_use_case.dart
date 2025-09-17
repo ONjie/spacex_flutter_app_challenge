@@ -1,5 +1,7 @@
+import 'package:either_dart/either.dart';
 import 'package:spacex_flutter_app/domain/entities/capsule_entity.dart';
 
+import '../../core/failures/failures.dart';
 import '../repositories/space_x_repository.dart';
 
 class FetchCapsuleByIdUseCase {
@@ -7,6 +9,6 @@ class FetchCapsuleByIdUseCase {
 
   FetchCapsuleByIdUseCase({required this.spaceXRepository});
 
-  Future<CapsuleEntity> call({required String id}) async =>
+  Future<Either<Failure, CapsuleEntity>> call({required String id}) async =>
       spaceXRepository.fetchCapsuleById(id: id);
 }

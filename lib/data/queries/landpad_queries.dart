@@ -2,7 +2,7 @@
 // Fetch data about SpaceX landpads
 
 // Get all Landpads
-const String getLandpadsQuery = r'''
+const String getLandpadsQuery = '''
  query getLandpads {
   landpads {
    status
@@ -14,9 +14,9 @@ const String getLandpadsQuery = r'''
 ''';
 
 // Gets Landpad by its id
-const getLandpadByIdQuery = r'''
- query getLandpadById($id: ID!){
-  landpad(id: $id){
+const getLandpadByIdQuery = '''
+ query getLandpadById(\$id: ID!){
+  landpad(id: \$id){
    status
    details
    full_name

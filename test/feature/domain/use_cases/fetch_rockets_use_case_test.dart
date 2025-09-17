@@ -1,5 +1,7 @@
+import 'package:either_dart/either.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:spacex_flutter_app/core/failures/failures.dart';
 import 'package:spacex_flutter_app/domain/entities/rocket_entity.dart';
 import 'package:spacex_flutter_app/domain/repositories/space_x_repository.dart';
 import 'package:spacex_flutter_app/domain/use_cases/fetch_rockets_use_case.dart';
@@ -37,17 +39,17 @@ void main() {
     type: 'type',
   );
 
-  test("should return a [RocketEntity] when call is successful", () async {
+  test("should return a Right([RocketEntity]) when call is successful", () async {
     //arrange
     when(() => mockSpaceXRepository.fetchRockets())
-        .thenAnswer((_) async => [testRocket]);
+        .thenAnswer((_) async => Right([testRocket]));
 
     //act
     final results = await fetchRocketsUseCase.call();
 
     //assert
-    expect(results, isA<List<RocketEntity>>());
-    expect(results, equals([testRocket]));
+    expect(results, isA<Right<Failure, List<RocketEntity>>>());
+    expect(results.right, equals([testRocket]));
     verify(() => mockSpaceXRepository.fetchRockets()).called(1);
     verifyNoMoreInteractions(mockSpaceXRepository);
   });

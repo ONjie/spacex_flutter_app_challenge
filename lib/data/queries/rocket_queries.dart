@@ -2,7 +2,7 @@
 // Fetch data about SpaceX rockets
 
 // Get all rockets
-const String getAllRocketsQuery = r'''
+const String getAllRocketsQuery = '''
  query getRockets {
   rockets {
     id
@@ -34,9 +34,9 @@ const String getAllRocketsQuery = r'''
 ''';
 
 //Get rocket by its id
-const String getRocketByIdQuery = r'''
- query getRocketById($id: ID!){
-   rocket(id: $id){
+const String getRocketByIdQuery = '''
+ query getRocketById(\$id: ID!){
+   rocket(id: \$id){
     id
     type
     stages
