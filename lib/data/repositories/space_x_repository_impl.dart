@@ -16,7 +16,7 @@ import '../../core/utils/infos/infos.dart';
 import '../../domain/repositories/space_x_repository.dart';
 import '../queries/rocket_queries.dart';
 
-// Implementation of the [SpaceXRepository] interface. 
+// Implementation of the [SpaceXRepository] interface.
 // This class acts as the data layer of the application and interacts with:
 // GraphQLService to perform GraphQL queries.
 // NetworkInfo to check network connectivity.
@@ -70,7 +70,6 @@ class SpaceXRepositoryImpl implements SpaceXRepository {
     }
   }
 
-
   // Fetch all capsules.
 
   // Returns:
@@ -97,7 +96,8 @@ class SpaceXRepositoryImpl implements SpaceXRepository {
           .map((json) => CapsuleModel.fromJson(json as Map<String, dynamic>))
           .toList();
 
-      final capsuleEntityList = capsuleModelList.map((e) => e.toEntity()).toList();
+      final capsuleEntityList =
+          capsuleModelList.map((e) => e.toEntity()).toList();
 
       return Right(capsuleEntityList);
     } on GraphQLException catch (e) {
@@ -105,8 +105,7 @@ class SpaceXRepositoryImpl implements SpaceXRepository {
     }
   }
 
-
- // Fetch a single launch by its [id].
+  // Fetch a single launch by its [id].
 
   // Returns:
   // Right(LaunchEntity) on success.
@@ -140,7 +139,6 @@ class SpaceXRepositoryImpl implements SpaceXRepository {
     }
   }
 
-
   // Fetch all launches.
 
   // Returns:
@@ -154,7 +152,6 @@ class SpaceXRepositoryImpl implements SpaceXRepository {
       return const Left(
           InternetConnectionFailure(message: noInternetConnectionMessage));
     }
-
     try {
       final result = await graphQLService.executeQuery(getLaunchesQuery);
 
@@ -167,16 +164,15 @@ class SpaceXRepositoryImpl implements SpaceXRepository {
           .map((json) => LaunchModel.fromJson(json as Map<String, dynamic>))
           .toList();
 
-      final launcheEntityList = launcheModelList.map((e) => e.toEntity()).toList();
-
+      final launcheEntityList =
+          launcheModelList.map((e) => e.toEntity()).toList();
       return Right(launcheEntityList);
     } on GraphQLException catch (e) {
       return Left(GraphQLFailure(message: e.message));
     }
   }
 
-
- // Fetch a single rocket by its [id].
+  // Fetch a single rocket by its [id].
 
   // Returns:
   // Right(RocketEntity) on success.
@@ -184,8 +180,9 @@ class SpaceXRepositoryImpl implements SpaceXRepository {
   // Left(DataNotFoundFailure) if the rocket is not found.
   // Left(GraphQLFailure) if the GraphQLException occurs.
   @override
-  Future<Either<Failure, RocketEntity>> fetchRocketById({required String id}) async {
-     if (!await networkInfo.isConnected) {
+  Future<Either<Failure, RocketEntity>> fetchRocketById(
+      {required String id}) async {
+    if (!await networkInfo.isConnected) {
       return const Left(
           InternetConnectionFailure(message: noInternetConnectionMessage));
     }
@@ -208,8 +205,6 @@ class SpaceXRepositoryImpl implements SpaceXRepository {
       return Left(GraphQLFailure(message: e.message));
     }
   }
-
-
 
 // Fetch all rockets.
 
@@ -238,12 +233,12 @@ class SpaceXRepositoryImpl implements SpaceXRepository {
           .map((json) => RocketModel.fromJson(json as Map<String, dynamic>))
           .toList();
 
-      final rocketEntityList = rocketModelList.map((e) => e.toEntity()).toList();
+      final rocketEntityList =
+          rocketModelList.map((e) => e.toEntity()).toList();
 
       return Right(rocketEntityList);
     } on GraphQLException catch (e) {
       return Left(GraphQLFailure(message: e.message));
     }
-    
   }
 }
