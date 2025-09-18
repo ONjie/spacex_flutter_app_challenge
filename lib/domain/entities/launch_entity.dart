@@ -32,4 +32,17 @@ class LaunchEntity extends Equatable {
         rocketName,
         upcoming
       ];
+
+ static LaunchEntity dummyLaunch() {
+    return LaunchEntity(
+      id: '0',
+      missionName: 'Loading...',
+      rocketName: 'Rocket',
+      upcoming: false,
+      details: 'details',
+      launchDateLocal: DateTime.now(),
+      launchYear: '2025',
+      rocketType: 'RocketType',
+    );
+  }
 }
