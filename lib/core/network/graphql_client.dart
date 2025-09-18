@@ -41,7 +41,7 @@ class GraphQLService {
     final results = await _client.query(options);
 
     if (results.hasException) {
-      throw GraphQLException(message: results.exception!.graphqlErrors.first.message);
+      throw GraphQLException(message: 'GraphQL error');
     }
 
     return results;
