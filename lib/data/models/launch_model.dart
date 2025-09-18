@@ -29,7 +29,7 @@ class LaunchModel extends Equatable {
    /// Create a LaunchModel from JSON Map
   factory LaunchModel.fromJson(Map<String, dynamic> json) => LaunchModel(
         id: json['id'] as String,
-        details: json['details'] as String,
+        details: json['details'] ?? 'No details available',
         launchDateLocal: DateTime.parse(json['launch_date_local']),
         launchYear: json['launch_year'] as String,
         missionName: json['mission_name'] as String,
