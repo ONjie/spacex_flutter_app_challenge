@@ -1,23 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:spacex_flutter_app/core/network/graphql_client.dart';
+import 'package:spacex_flutter_app/presentation/providers/capsule_provider.dart';
+import 'package:spacex_flutter_app/presentation/providers/launch_provider.dart';
 
 import 'core/utils/theme.dart';
 import 'core/utils/localization/spacex_localization.dart';
+import 'presentation/providers/rocket_provider.dart';
 import 'presentation/providers/theme_provider.dart';
 import 'presentation/providers/language_provider.dart';
+import 'presentation/screens/dashboard_screen.dart';
 import 'presentation/screens/splash_screen.dart';
+import 'dependency_injection.dart' as di;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await di.initializeDependencyInjection();
+
   // Initialize SharedPreferences
   await SharedPreferences.getInstance();
 
-  runApp(const SpaceXApp());
+  runApp(GraphQLProvider(
+    client: GraphQLService.clientNotifier,
+    child: const SpaceXApp()));
 }
 
 class SpaceXApp extends StatefulWidget {
@@ -65,9 +76,9 @@ class _SpaceXAppState extends State<SpaceXApp> {
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => _languageProvider),
         // TODO: Add other providers as you implement them
-        // ChangeNotifierProvider(create: (_) => MissionProvider()),
-        // ChangeNotifierProvider(create: (_) => RocketProvider()),
-        // ChangeNotifierProvider(create: (_) => LaunchProvider()),
+       ChangeNotifierProvider(create: (_) => di.locator<CapsuleProvider>()),
+       ChangeNotifierProvider(create: (_) => di.locator<RocketProvider>()),
+       ChangeNotifierProvider(create: (_) => di.locator<LaunchProvider>()),
       ],
       child: Consumer2<ThemeProvider, LanguageProvider>(
         builder: (context, themeProvider, languageProvider, child) {
@@ -93,6 +104,7 @@ class _SpaceXAppState extends State<SpaceXApp> {
                 home: const SplashScreen(),
                 getPages: [
                   GetPage(name: '/', page: () => const SplashScreen()),
+                  GetPage(name: '/dashboard', page: () => const DashboardScreen()),
                 ],
               );
             },
