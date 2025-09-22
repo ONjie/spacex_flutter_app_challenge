@@ -8,10 +8,8 @@
         "id": "id",
         "details": "details",
         "rocket": {
-          "rocket_name": "rocketName",
-          "rocket_type": "rocketType"
-        },
-        "launch_year": "launchYear"
+          "rocket_name": "rocketName"
+        }
       }
     ]
   }

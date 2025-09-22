@@ -22,9 +22,7 @@ void main() {
     id: 'id',
     active: false,
     boosters: 1,
-    company: 'company',
     costPerLaunch: 100,
-    country: 'country',
     description: 'description',
     diameterInFeet: 1.0,
     diameterInMeters: 1.0,
@@ -37,6 +35,7 @@ void main() {
     stages: 1,
     successRate: 100,
     type: 'type',
+    numberOfEngines: 1
   );
 
   test("should return a Right([RocketEntity]) when call is successful", () async {

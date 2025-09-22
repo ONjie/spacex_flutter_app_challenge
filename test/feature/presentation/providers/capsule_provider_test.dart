@@ -4,27 +4,32 @@ import 'package:mocktail/mocktail.dart';
 import 'package:spacex_flutter_app/core/failures/failures.dart';
 import 'package:spacex_flutter_app/domain/entities/capsule_entity.dart';
 import 'package:spacex_flutter_app/domain/use_cases/fetch_capsule_by_id_use_case.dart';
+import 'package:spacex_flutter_app/domain/use_cases/fetch_capsules_by_pagination_use_case.dart';
 import 'package:spacex_flutter_app/domain/use_cases/fetch_capsules_use_case.dart';
 import 'package:spacex_flutter_app/presentation/providers/capsule_provider.dart';
-
 
 class MockFetchCapsulesUseCase extends Mock implements FetchCapsulesUseCase {}
 
 class MockFetchCapsuleByIdUseCase extends Mock
     implements FetchCapsuleByIdUseCase {}
 
+class MockFetchCapsulesByPaginationUseCase extends Mock
+    implements FetchCapsulesByPaginationUseCase {}
+
 void main() {
   late CapsuleProvider capsuleProvider;
   late MockFetchCapsulesUseCase mockFetchCapsulesUseCase;
   late MockFetchCapsuleByIdUseCase mockFetchCapsuleByIdUseCase;
+  late MockFetchCapsulesByPaginationUseCase mockFetchCapsulesByPaginationUseCase;
 
   setUp(() {
     mockFetchCapsulesUseCase = MockFetchCapsulesUseCase();
     mockFetchCapsuleByIdUseCase = MockFetchCapsuleByIdUseCase();
+    mockFetchCapsulesByPaginationUseCase = MockFetchCapsulesByPaginationUseCase();
     capsuleProvider = CapsuleProvider(
-      fetchCapsulesUseCase: mockFetchCapsulesUseCase,
-      fetchCapsuleByIdUseCase: mockFetchCapsuleByIdUseCase,
-    );
+        fetchCapsulesUseCase: mockFetchCapsulesUseCase,
+        fetchCapsuleByIdUseCase: mockFetchCapsuleByIdUseCase,
+        fetchCapsulesByPaginationUseCase: mockFetchCapsulesByPaginationUseCase);
   });
 
   const testCapsuleA = CapsuleEntity(
@@ -33,25 +38,17 @@ void main() {
     status: 'status',
     type: 'type',
   );
-  const testCapsuleB = CapsuleEntity(
-    id: 'id',
-    reuseCount: 1,
-    status: 'status',
-    type: 'type',
-  );
+  test('initial state should be empty and not loading', () async {
+    //assert
+    expect(capsuleProvider.capsules, isEmpty);
+    expect(capsuleProvider.capsule, CapsuleEntity.capsuledummy);
+    expect(capsuleProvider.isLoading, isFalse);
+    expect(capsuleProvider.error, isNull);
+  });
 
-
-  group('CapsuleProvider', () {
-    test('initial state should be empty and not loading', () async {
-      //assert
-      expect(capsuleProvider.capsules, isEmpty);
-      expect(capsuleProvider.capsule, isNull);
-      expect(capsuleProvider.isLoading, isFalse);
-      expect(capsuleProvider.error, isNull);
-    });
-
+  group('fetchCapsules', () {
     test(
-        'fetchCapsules should return an error message when call is unsuccessful',
+        'should return an error message when call is unsuccessful',
         () async {
       //arrange
       when(() => mockFetchCapsulesUseCase.call()).thenAnswer(
@@ -68,7 +65,7 @@ void main() {
       verifyNoMoreInteractions(mockFetchCapsulesUseCase);
     });
 
-    test('fetchCapsules should return [CapsuleEntity] when call is successful',
+    test('should return [CapsuleEntity] when call is successful',
         () async {
       //arrange
       when(() => mockFetchCapsulesUseCase.call())
@@ -84,9 +81,11 @@ void main() {
       verify(() => mockFetchCapsulesUseCase.call()).called(1);
       verifyNoMoreInteractions(mockFetchCapsulesUseCase);
     });
+  });
 
+  group('fetchCapsuleById', () {
     test(
-        'fetchCapsuleById should return an error message when call is unsuccessful',
+        'should return an error message when call is unsuccessful',
         () async {
       //arrange
       when(() => mockFetchCapsuleByIdUseCase.call(id: any(named: 'id')))
@@ -97,7 +96,7 @@ void main() {
       await capsuleProvider.fetchCapsuleById(id: 'id');
 
       //assert
-      expect(capsuleProvider.capsule, isNull);
+      expect(capsuleProvider.capsule, CapsuleEntity.capsuledummy);
       expect(capsuleProvider.isLoading, isFalse);
       expect(capsuleProvider.error, equals('GraphQL error'));
       verify(() => mockFetchCapsuleByIdUseCase.call(id: any(named: 'id')))
@@ -106,7 +105,7 @@ void main() {
     });
 
     test(
-        'fetchCapsuleById should return a CapsuleEntity  when call is successful',
+        'should return a CapsuleEntity  when call is successful',
         () async {
       //arrange
       when(() => mockFetchCapsuleByIdUseCase.call(id: any(named: 'id')))
@@ -123,38 +122,75 @@ void main() {
           .called(1);
       verifyNoMoreInteractions(mockFetchCapsuleByIdUseCase);
     });
+  });
 
-    test('clearError should reset error', () async {
+   group('fetchCapsulesByPagination', () {
+    test(
+        ' should return an error message when call is unsuccessful',
+        () async {
+      //arrange
+      when(() => mockFetchCapsulesByPaginationUseCase.call(
+                offset: any<int>(named: 'offset'),
+                limit: any<int>(named: 'limit'),
+              ))
+          .thenAnswer((_) async =>
+              const Left(GraphQLFailure(message: 'GraphQL error')));
+
       //act
-      capsuleProvider.clearError();
+      await capsuleProvider.fetchCapsulesByPagination();
 
       //assert
-      expect(capsuleProvider.error, isNull);
+      expect(capsuleProvider.paginatedCapsules.length, 0);
+      expect(capsuleProvider.hasMore, isTrue);
+      expect(capsuleProvider.error, equals('GraphQL error'));
+      verify(() => mockFetchCapsulesByPaginationUseCase.call(
+            offset: any<int>(named: 'offset'),
+            limit: any<int>(named: 'limit'),
+          )).called(1);
+      verifyNoMoreInteractions(mockFetchCapsulesByPaginationUseCase);
     });
 
-    test('refreshCapsules should reset state and fetch capsules', () async {
+    test(
+        'should return [LaunchEntity] when call is successful',
+        () async {
       //arrange
-      when(() => mockFetchCapsulesUseCase.call())
-          .thenAnswer((_) async => const Right([testCapsuleA]));
-
-      await capsuleProvider.fetchCapsules();
-      expect(capsuleProvider.capsules, equals([testCapsuleA]));
-
-      when(() => mockFetchCapsulesUseCase.call())
-          .thenAnswer((_) async => const Right([testCapsuleB]));
+      when(() => mockFetchCapsulesByPaginationUseCase.call(
+            offset: any<int>(named: 'offset'),
+            limit: any<int>(named: 'limit'),
+          )).thenAnswer((_) async => const Right([testCapsuleA]));
 
       //act
-      capsuleProvider.refreshCapsules();
+      await capsuleProvider.fetchCapsulesByPagination();
 
-      //provider should now contain rocketB (refetched)
       //assert
-
-      expect(capsuleProvider.capsules, equals([testCapsuleB]));
-      expect(capsuleProvider.isLoading, isTrue);
+      expect(capsuleProvider.paginatedCapsules, equals([testCapsuleA]));
+      expect(capsuleProvider.hasMore, isTrue);
       expect(capsuleProvider.error, isNull);
-
-      verify(() => mockFetchCapsulesUseCase.call()).called(2);
+      verify(() => mockFetchCapsulesByPaginationUseCase.call(
+            offset: any<int>(named: 'offset'),
+            limit: any<int>(named: 'limit'),
+          )).called(1);
       verifyNoMoreInteractions(mockFetchCapsulesUseCase);
+    });
+  });
+
+   group('refreshLaunches', () {
+    test('should reset paginated launches and refetch', () async {
+      when(() => mockFetchCapsulesByPaginationUseCase.call(
+            offset: any<int>(named: 'offset'),
+            limit: any<int>(named: 'limit'),
+          )).thenAnswer((_) async => const Right([testCapsuleA]));
+
+      await capsuleProvider.refreshCapsules();
+
+      expect(capsuleProvider.paginatedCapsules, contains(testCapsuleA));
+      expect(capsuleProvider.offset, greaterThan(0));
+      expect(capsuleProvider.hasMore, isTrue);
+      verify(() => mockFetchCapsulesByPaginationUseCase.call(
+            offset: any<int>(named: 'offset'),
+            limit: any<int>(named: 'limit'),
+          )).called(1);
+      verifyNoMoreInteractions(mockFetchCapsulesByPaginationUseCase);
     });
   });
 }

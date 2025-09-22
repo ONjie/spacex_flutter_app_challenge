@@ -30,9 +30,7 @@ void main() {
     id: 'id',
     active: false,
     boosters: 1,
-    company: 'company',
     costPerLaunch: 100,
-    country: 'country',
     description: 'description',
     diameterInFeet: 1.0,
     diameterInMeters: 1.0,
@@ -45,15 +43,14 @@ void main() {
     stages: 1,
     successRate: 100,
     type: 'type',
+    numberOfEngines: 1,
   );
 
   final testRocketB = RocketEntity(
     id: 'id',
     active: false,
     boosters: 1,
-    company: 'company',
     costPerLaunch: 100,
-    country: 'country',
     description: 'description',
     diameterInFeet: 1.0,
     diameterInMeters: 1.0,
@@ -66,13 +63,14 @@ void main() {
     stages: 1,
     successRate: 100,
     type: 'type',
+    numberOfEngines: 1,
   );
 
   group('RocketProvider', () {
     test('initial state should be empty and not loading', () async {
       //assert
       expect(rocketProvider.rockets, isEmpty);
-      expect(rocketProvider.rocket, isNull);
+      expect(rocketProvider.rocket, RocketEntity.rocketDummy);
       expect(rocketProvider.isLoading, isFalse);
       expect(rocketProvider.error, isNull);
     });
@@ -124,7 +122,7 @@ void main() {
       await rocketProvider.fetchRocketById(id: 'id');
 
       //assert
-      expect(rocketProvider.rocket, isNull);
+      expect(rocketProvider.rocket, RocketEntity.rocketDummy);
       expect(rocketProvider.isLoading, isFalse);
       expect(rocketProvider.error, equals('GraphQL error'));
       verify(() => mockFetchRocketByIdUseCase.call(id: any(named: 'id')))
@@ -175,7 +173,7 @@ void main() {
 
       //provider should now contain rocketB (refetched)
       //assert
-      
+
       expect(rocketProvider.rockets, equals([testRocketB]));
       expect(rocketProvider.isLoading, isTrue);
       expect(rocketProvider.error, isNull);

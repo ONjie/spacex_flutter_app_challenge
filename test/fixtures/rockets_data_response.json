@@ -4,9 +4,7 @@
       {
         "active": false,
         "boosters": 1,
-        "company": "company",
         "cost_per_launch": 100,
-        "country": "country",
         "description": "description",
         "diameter": {
           "meters": 1.0,
@@ -25,6 +23,9 @@
         "mass": {
           "lb": 30,
           "kg": 20
+        },
+        "engines":{
+          "number": 1
         }
       }
     ]

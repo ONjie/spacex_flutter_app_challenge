@@ -22,10 +22,8 @@ void main() {
     id: 'id',
     active: false,
     boosters: 1,
-    company: 'company',
     costPerLaunch: 100,
-    country: '',
-    description: '',
+    description: 'description',
     diameterInFeet: 1.0,
     diameterInMeters: 1.0,
     firstFlight: DateTime.parse('2025-09-15T13:40:44.563985'),
@@ -37,6 +35,7 @@ void main() {
     stages: 1,
     successRate: 100,
     type: 'type',
+    numberOfEngines: 1
   );
 
   test("should return a Right(RocketEntity) when call is successful", () async {
