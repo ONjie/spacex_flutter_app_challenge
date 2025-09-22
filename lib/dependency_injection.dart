@@ -1,6 +1,8 @@
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:spacex_flutter_app/core/network/graphql_client.dart';
+import 'package:spacex_flutter_app/domain/use_cases/fetch_capsules_by_pagination_use_case.dart';
+import 'package:spacex_flutter_app/domain/use_cases/fetch_launches_by_pagination_use_case.dart';
 
 import 'core/network/network_info.dart';
 import 'data/repositories/space_x_repository_impl.dart';
@@ -29,15 +31,15 @@ Future<void> initializeDependencyInjection() async {
 
   //launchProvider
   locator.registerFactory(() => LaunchProvider(
-        fetchLaunchesUseCase: locator(),
-        fetchLaunchByIdUseCase: locator(),
-      ));
+      fetchLaunchesUseCase: locator(),
+      fetchLaunchByIdUseCase: locator(),
+      fetchLaunchesByPaginationUseCase: locator()));
 
   //CapsuleProvider
   locator.registerFactory(() => CapsuleProvider(
-        fetchCapsulesUseCase: locator(),
-        fetchCapsuleByIdUseCase: locator(),
-      ));
+      fetchCapsulesUseCase: locator(),
+      fetchCapsuleByIdUseCase: locator(),
+      fetchCapsulesByPaginationUseCase: locator()));
 
   //registering UseCases
   //rocketUseCases
@@ -51,12 +53,17 @@ Future<void> initializeDependencyInjection() async {
       () => FetchLaunchesUseCase(spaceXRepository: locator()));
   locator.registerLazySingleton(
       () => FetchLaunchByIdUseCase(spaceXRepository: locator()));
+  locator.registerLazySingleton(
+      () => FetchLaunchesByPaginationUseCase(spaceXRepository: locator()));
 
   //capsuleUseCases
   locator.registerLazySingleton(
       () => FetchCapsulesUseCase(spaceXRepository: locator()));
   locator.registerLazySingleton(
       () => FetchCapsuleByIdUseCase(spaceXRepository: locator()));
+
+  locator.registerLazySingleton(
+      () => FetchCapsulesByPaginationUseCase(spaceXRepository: locator()));
 
   //registering Repositories
   locator.registerLazySingleton<SpaceXRepository>(() => SpaceXRepositoryImpl(
