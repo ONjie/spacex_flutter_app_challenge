@@ -15,4 +15,7 @@ class CapsuleEntity extends Equatable {
 
   @override
   List<Object?> get props => [id, reuseCount, status, type];
+
+  static CapsuleEntity capsuledummy = const CapsuleEntity(
+      id: 'id', reuseCount: 1, status: 'status', type: 'type');
 }
