@@ -5,9 +5,7 @@ class LaunchEntity extends Equatable {
     required this.id,
     required this.details,
     required this.launchDateLocal,
-    required this.launchYear,
     required this.missionName,
-    required this.rocketType,
     required this.rocketName,
     required this.upcoming,
   });
@@ -15,9 +13,7 @@ class LaunchEntity extends Equatable {
   final String id;
   final String details;
   final DateTime launchDateLocal;
-  final String launchYear;
   final String missionName;
-  final String rocketType;
   final String rocketName;
   final bool upcoming;
 
@@ -26,23 +22,17 @@ class LaunchEntity extends Equatable {
         id,
         details,
         launchDateLocal,
-        launchYear,
         missionName,
-        rocketType,
         rocketName,
         upcoming
       ];
 
- static LaunchEntity dummyLaunch() {
-    return LaunchEntity(
+ static LaunchEntity dummyLaunch = LaunchEntity(
       id: '0',
       missionName: 'Loading...',
       rocketName: 'Rocket',
       upcoming: false,
       details: 'details',
       launchDateLocal: DateTime.now(),
-      launchYear: '2025',
-      rocketType: 'RocketType',
     );
-  }
 }
