@@ -80,219 +80,86 @@ lib/
     └── utils/              # UI utilities
 ```
 
-## 📝 Development Tasks
+## Detailed Implementation Approach
 
-### Phase 1: Foundation (Required)
+### Project Setup & Architecture
+Clean Architecture was followed by splitting the project into:
+Domain Layer → Entities & Use Cases (business logic)
+Data Layer → Repositories & API services
+Presentation Layer → UI screens, widgets, and Providers
+Used Provider for state management across the app, keeping business logic separate from UI.
 
-- [ ] **Task 1.1**: Implement data models for SpaceX entities (Capsule, Rocket, Launch, etc.)
-- [ ] **Task 1.2**: Create GraphQL queries for SpaceX API
-- [ ] **Task 1.3**: Set up repository pattern and use cases
-- [ ] **Task 1.4**: Implement Provider state management
-- [ ] **Task 1.5**: Create basic navigation structure
-- [x] **Task 1.6**: Internationalization (i18n) support (English & French) - ✅ **COMPLETED**
+### Data Handling
+Repository Pattern implemented via SpaceXRepository interface.
+Either<Failure, T> was used to handle success and failure responses consistently.
+Use Cases were created for each feature:
+FetchRocketsUseCase, FetchCapsulesByPaginationUseCase, FetchLaunchByIdUseCase, etc.
+NetworkInfo class integrated with internet_connection_checker to detect connectivity and avoid unnecessary API calls.
 
-### Phase 2: Core Features (Required)
+### UI Design & Theming
+Built with Flutter's Material Design principles.
+Implemented light and dark mode support using Theme.of(context) to dynamically adjust colors.
+Consistent typography and spacing applied across screens for a professional look.
+Created reusable widgets for:
+Error Handling: ErrorStateWidget
+Status Display: StatusContainerWidget
+Cards: description, physical specifications, performance metrics
 
-- [ ] **Task 2.1**: Build Capsule Explorer screen with list/grid view
-- [ ] **Task 2.2**: Create Rocket Gallery with detailed specifications
-- [ ] **Task 2.3**: Implement Launch Tracker for upcoming/past launches
-- [ ] **Task 2.4**: Add search and filter functionality
-- [ ] **Task 2.5**: Implement pull-to-refresh and pagination
+### Skeleton Loading & Shimmer
+Integrated Skeletonizer with a smooth Shimmer effect for:
+Rockets list
+Rocket details
+Launches list
+Capsules list
+This enhances perceived performance and provides a polished user experience.
 
-### Phase 3: UI/UX Excellence (Required)
 
-- [ ] **Task 3.1**: Design and implement space-themed UI components
-- [ ] **Task 3.2**: Add smooth animations and transitions
-- [ ] **Task 3.3**: Implement dark/light theme switching
-- [ ] **Task 3.4**: Create responsive design for tablets and phones
-- [ ] **Task 3.5**: Add loading states and error handling
-
-### Phase 4: Advanced Features (Bonus)
-
-- [ ] **Task 4.1**: Implement offline data caching
-- [ ] **Task 4.2**: Add image gallery with zoom functionality
-- [ ] **Task 4.3**: Create interactive rocket 3D models (if possible)
-- [ ] **Task 4.4**: Implement push notifications for upcoming launches
-- [ ] **Task 4.5**: Add accessibility features and screen reader support
-
-## 🛰️ SpaceX API Integration
-
-### GraphQL Endpoint
-
-```
-https://spacex-production.up.railway.app/
-```
-
-### Key Data to Implement
-
-- **Capsules**: `capsules` query
-- **Rockets**: `rockets` query
-- **Launches**: `launches` query
-- **Launchpads**: `launchpads` query
-- **Landpads**: `landpads` query
-
-### Sample Queries
-
-```graphql
-# Get all capsules
-query GetCapsules {
-  capsules {
-    id
-    type
-    status
-    serial
-    reuse_count
-    water_landings
-    land_landings
-    last_update
-    launches {
-      id
-      name
-    }
-  }
+### Pagination & Infinite Scroll
+Implemented offset-based pagination in LaunchProvider and CapsuleProvider.
+Implemented a ScrollController to detect when the user reaches the bottom and trigger:
+if (_scrollController.position.maxScrollExtent == _scrollController.offset) {
+  provider.fetchLaunchesByPagination();
 }
+Ensures smooth infinite scrolling without blocking the UI.
 
-# Get all rockets
-query GetRockets {
-  rockets {
-    id
-    name
-    type
-    active
-    cost_per_launch
-    success_rate_pct
-    first_flight
-    country
-    company
-    height {
-      meters
-      feet
-    }
-    diameter {
-      meters
-      feet
-    }
-    mass {
-      kg
-      lb
-    }
-    flickr_images
-    description
-  }
-}
-```
 
-## 🎨 Design System
+### Search & Filters
+Implemented debounced search to minimize unnecessary state updates:
+Timer? _debounce;
+_debounce = Timer(const Duration(milliseconds: 100), () {
+  launchProvider.setSearchQuery(query: query);
+});
+Added dropdown filter for "upcoming" launches.
+Clear filters button resets both search query and filter state.
 
-### Colors
 
-- **Primary**: #1E3A8A (Space Blue)
-- **Secondary**: #F59E0B (Rocket Orange)
-- **Success**: #10B981 (Mission Green)
-- **Error**: #EF4444 (Launch Red)
-- **Background**: #0F172A (Dark Space)
-- **Surface**: #1E293B (Card Surface)
-- **Accent**: #8B5CF6 (Purple Accent)
+### Error Handling & Retry
+Centralized error handling using custom Failure classes (e.g., GraphQLFailure).
+Displayed human-friendly messages in ErrorStateWidget.
+Included retry buttons to re-fetch data when an error occurs.
 
-### Typography
 
-- **Headline**: 24sp, Bold
-- **Title**: 20sp, Medium
-- **Body**: 16sp, Regular
-- **Caption**: 12sp, Regular
+### Responsive UI
+Adjusted font sizes and padding based on screen width (e.g., tablets vs phones).
+Used Expanded and AspectRatio widgets for scalable layouts.
 
-### Spacing
 
-- **XS**: 4dp
-- **S**: 8dp
-- **M**: 16dp
-- **L**: 24dp
-- **XL**: 32dp
+### Utility Functions
+Created formatting helpers for consistent display:
+formatCurrency() – Converts cost per launch into compact currency (e.g., $50M).
+formatDate() – Standardizes date display.
+formatLaunchDate() – Converts UTC date to local time with human-readable format.
+getStatusColor() – Maps launch/rocket status to a color for badges.
 
-## 📊 Evaluation Criteria
 
-### Technical Implementation (40%)
+### Testing & Verification
+Verified GraphQL calls for all use cases.
+Tested pagination, refresh indicators, and error states.
+Verified UI in both dark mode and light mode.
+Checked responsiveness on multiple device sizes.
+Implemented Unit test for Repositories, Use cases and providers
 
-- Clean architecture implementation
-- Proper state management
-- GraphQL integration
-- Code quality and organization
-- Error handling
-
-### UI/UX Design (40%)
-
-- Visual design quality
-- User experience flow
-- Responsive design
-- Animations and transitions
-- Accessibility
-
-### Code Quality (20%)
-
-- Code readability
-- Documentation
-- Git commit history
-- Performance optimization
-- Testing (if applicable)
-
-## 📤 Submission Guidelines
-
-### What to Submit
-
-1. **Forked Repository**: Your completed implementation
-2. **Screenshots**: Key screens and features
-3. **Demo Video**: 2-3 minute walkthrough (optional but recommended)
-4. **README Update**: Document your implementation approach
-
-### Submission Checklist
-
-- [ ] All required tasks completed
-- [ ] App runs without errors
-- [ ] Responsive design implemented
-- [ ] Clean, well-documented code
-- [ ] Updated README with implementation details
-- [ ] Screenshots included in repository
-
-### How to Submit
-
-1. Complete all tasks in your forked repository
-2. Update the README with your implementation details
-3. Add screenshots to a `screenshots/` folder
-4. Create a pull request to the original repository
-5. Include a brief description of your implementation approach
-
-## 🛠️ Tech Stack
-
-- **Framework**: Flutter 3.x
-- **State Management**: Provider
-- **Navigation**: GetX
-- **API**: GraphQL with graphql_flutter
-- **Local Storage**: SharedPreferences
-- **UI Components**: Custom widgets + Material Design
-- **Internationalization**: Custom i18n implementation (English & French)
-
-## 📚 Learning Resources
-
-### Flutter
-
-- [Flutter Documentation](https://flutter.dev/docs)
-- [Flutter Widget Catalog](https://flutter.dev/docs/development/ui/widgets)
-- [Material Design Guidelines](https://material.io/design)
-
-### State Management
-
-- [Provider Package](https://pub.dev/packages/provider)
-- [GetX Package](https://pub.dev/packages/get)
-
-### GraphQL
-
-- [GraphQL Flutter](https://pub.dev/packages/graphql_flutter)
-- [GraphQL Documentation](https://graphql.org/learn/)
-
-## 📞 Support
-
-For questions about the challenge, please contact the development team.
-
----
-
-**Good luck and happy coding! 🚀**
+### Documentation & Screenshots
+Updated README.md with feature list, installation steps, and screenshots.
+Added screenshots to screenshots/ folder:
+Home, Rockets, Rocket Details, Capsules, Launches, Launch Details, Search Results
