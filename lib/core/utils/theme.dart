@@ -53,7 +53,7 @@ class AppTheme {
         bodyMedium: TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.normal,
-          color: Colors.black87,
+          color: Colors.black,
         ),
       ),
     );
