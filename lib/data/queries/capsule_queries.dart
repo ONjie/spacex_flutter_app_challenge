@@ -13,6 +13,18 @@ const String getCapsulesQuery = '''
   }
 ''';
 
+//Get Capsules by pagination
+const String getCapsulesByPaginationQuery = '''
+query getCapsulesByPagination(\$offset: Int, \$limit: Int){
+    capsules(offset: \$offset, limit: \$limit){
+      id
+      reuse_count
+      status
+      type
+    }
+  }
+''';
+
 //Gets Capsule by its id
 const String getCapsuleByIdQuery = '''
   query getCapsule(\$id: ID!) {
