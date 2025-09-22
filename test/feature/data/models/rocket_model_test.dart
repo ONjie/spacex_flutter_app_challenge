@@ -11,9 +11,7 @@ void main() {
     id: 'id',
     active: false,
     boosters: 1,
-    company: 'company',
     costPerLaunch: 100,
-    country: 'country',
     description: 'description',
     diameterInFeet: 2.0,
     diameterInMeters: 1.0,
@@ -26,15 +24,14 @@ void main() {
     stages: 1,
     successRate: 100,
     type: 'type',
+    numberOfEngines: 1,
   );
 
-   final testRocketEntity = RocketEntity(
+  final testRocketEntity = RocketEntity(
     id: 'id',
     active: false,
     boosters: 1,
-    company: 'company',
     costPerLaunch: 100,
-    country: 'country',
     description: 'description',
     diameterInFeet: 2.0,
     diameterInMeters: 1.0,
@@ -47,6 +44,7 @@ void main() {
     stages: 1,
     successRate: 100,
     type: 'type',
+    numberOfEngines: 1,
   );
 
   group('Rocket Model', () {
@@ -63,7 +61,8 @@ void main() {
       expect(result, equals(testRocketModel));
     });
 
-    test('toJson should return a valid Json containing the proper data', () async {
+    test('toJson should return a valid Json containing the proper data',
+        () async {
       //arrange
       final expectedJsonData =
           json.decode(fixture('rockets_data_response.json'))
@@ -76,8 +75,10 @@ void main() {
       expect(result, isA<Map<String, dynamic>>());
       expect(result, equals(expectedJsonData['data']['rockets'][0]));
     });
-    
-    test('toEntity should return a valid RocketEntity containing the proper data', () async {
+
+    test(
+        'toEntity should return a valid RocketEntity containing the proper data',
+        () async {
       //arrange & act
       final result = testRocketModel.toEntity();
 
