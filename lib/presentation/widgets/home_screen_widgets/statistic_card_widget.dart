@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class StatisticCardWidget extends StatelessWidget {
-const StatisticCardWidget({
+  const StatisticCardWidget({
     super.key,
     required this.count,
     required this.label,
@@ -12,7 +12,6 @@ const StatisticCardWidget({
   final String count;
   final String label;
   final Color color;
-  
 
   @override
   Widget build(BuildContext context) {
@@ -26,19 +25,25 @@ const StatisticCardWidget({
         child: Padding(
           padding: const EdgeInsets.fromLTRB(12, 12, 12, 6),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
-      
             children: [
               Text(
                 count,
-                style: Theme.of(context).textTheme.headlineLarge,
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      fontSize: 21,
+                      fontWeight: FontWeight.bold,
+                    ),
               ),
               const SizedBox(
                 height: 10,
               ),
               Text(
                 label,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500, fontSize: 20),
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium
+                    ?.copyWith(fontWeight: FontWeight.w500, fontSize: 18),
               )
             ],
           ),
