@@ -17,33 +17,56 @@ class StatisticsGridViewWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        mainAxisSpacing: 18,
-        crossAxisSpacing: 18,
-        childAspectRatio:
-            MediaQuery.of(context).size.width < 600 ? 3 / 2 : 4 / 1,
-      ),
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isWide = screenWidth >= 600;
+
+    // Calculate a consistent card width for 2 columns
+    final double cardWidth = isWide
+        ? 250
+        : (screenWidth / 2) - 24; // subtracting padding + spacing
+    const double cardHeight = 120; // fixed height for equal layout
+
+    return Wrap(
+      spacing: 18,
+      runSpacing: 18,
+      alignment: WrapAlignment.center,
       children: [
-        StatisticCardWidget(
+        SizedBox(
+          width: cardWidth,
+          height: cardHeight,
+          child: StatisticCardWidget(
             count: '$totalLaunches',
             label: 'Total Launches',
-            color: Colors.blue),
-        StatisticCardWidget(
+            color: Colors.blue,
+          ),
+        ),
+        SizedBox(
+          width: cardWidth,
+          height: cardHeight,
+          child: StatisticCardWidget(
             count: '$upcomingLaunches',
             label: 'Upcoming Launches',
-            color: AppColors.secondary),
-        StatisticCardWidget(
+            color: AppColors.secondary,
+          ),
+        ),
+        SizedBox(
+          width: cardWidth,
+          height: cardHeight,
+          child: StatisticCardWidget(
             count: '$totalCapsules',
             label: 'Total Capsules',
-            color: AppColors.accent),
-        StatisticCardWidget(
+            color: AppColors.accent,
+          ),
+        ),
+        SizedBox(
+          width: cardWidth,
+          height: cardHeight,
+          child: StatisticCardWidget(
             count: '$totalRockets',
             label: 'Total Rockets',
-            color: AppColors.success),
+            color: AppColors.success,
+          ),
+        ),
       ],
     );
   }
