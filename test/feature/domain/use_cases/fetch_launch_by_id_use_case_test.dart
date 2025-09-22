@@ -22,9 +22,7 @@ void main() {
     id: 'id',
     details: 'details',
     launchDateLocal: DateTime.parse('2025-09-15T13:40:44.563985'),
-    launchYear: 'launchYear',
     missionName: 'missionName',
-    rocketType: 'rocketType',
     rocketName: 'rocketName',
     upcoming: false,
   );
