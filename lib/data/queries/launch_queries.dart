@@ -12,9 +12,23 @@ const String getLaunchesQuery = '''
     details
     rocket {
       rocket_name
-      rocket_type
     }
-    launch_year
+   }
+ }
+''';
+
+ //Get all launches by pagination
+ const getLaunchesByPaginationQuery = '''
+ query getLaunchesByPagination(\$offset: Int, \$limit: Int){
+ launches(offset: \$offset, limit: \$limit) {
+   mission_name
+    upcoming
+    launch_date_local
+    id
+    details
+    rocket {
+      rocket_name
+    }
    }
  }
 ''';
@@ -23,7 +37,7 @@ const String getLaunchesQuery = '''
 //Get Launch by its id
 const getLaunchByIdQuery = '''
  query getLaunchById(\$id: ID!){
-  launchpad(id: \$id){
+  launch(id: \$id){
     mission_name
     upcoming
     launch_date_local
@@ -31,9 +45,7 @@ const getLaunchByIdQuery = '''
     details
     rocket {
       rocket_name
-      rocket_type
     }
-    launch_year
   }
  }
 ''';
