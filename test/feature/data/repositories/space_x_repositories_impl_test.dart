@@ -51,20 +51,19 @@ void main() {
     id: 'id',
     details: 'details',
     launchDateLocal: DateTime.parse('2025-09-15T13:40:44.563985'),
-    launchYear: 'launchYear',
     missionName: 'missionName',
-    rocketType: 'rocketType',
     rocketName: 'rocketName',
     upcoming: false,
   );
 
-   final testRocketModel = RocketModel(
+  const testOffset = 0;
+  const testLimit = 1;
+
+  final testRocketModel = RocketModel(
     id: 'id',
     active: false,
     boosters: 1,
-    company: 'company',
     costPerLaunch: 100,
-    country: 'country',
     description: 'description',
     diameterInFeet: 2.0,
     diameterInMeters: 1.0,
@@ -77,6 +76,7 @@ void main() {
     stages: 1,
     successRate: 100,
     type: 'type',
+    numberOfEngines: 1,
   );
 
   void runOnlineTests(Function body) {
@@ -597,7 +597,7 @@ void main() {
     });
   });
 
-   group('fetchRockets', () {
+  group('fetchRockets', () {
     test('Checks if the device is online', () async {
       //arrange
       when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => false);
@@ -691,6 +691,261 @@ void main() {
         verify(() => mockNetworkInfo.isConnected).called(1);
         verify(() => mockGraphQLService.executeQuery(getRocketsQuery))
             .called(1);
+        verifyNoMoreInteractions(mockNetworkInfo);
+        verifyNoMoreInteractions(mockGraphQLService);
+      });
+    });
+  });
+
+  group('fetchLaunchesByPagination', () {
+    test('Checks if the device is online', () async {
+      //arrange
+      when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => false);
+
+      //act
+      await repositoryImpl.fetchLaunchesByPagination(
+        offset: testOffset,
+        limit: testLimit,
+      );
+
+      //assert
+      verify(() => mockNetworkInfo.isConnected).called(1);
+    });
+
+    runOfflineTests(() {
+      test(
+          'Should return Left(InternetConnectionFailure) when device is offline',
+          () async {
+        //act
+        final result = await repositoryImpl.fetchLaunchesByPagination(
+          offset: testOffset,
+          limit: testLimit,
+        );
+
+        //assert
+        expect(result, isA<Left<Failure, List<LaunchEntity>>>());
+        expect(
+            result.left,
+            equals(const InternetConnectionFailure(
+                message: noInternetConnectionMessage)));
+        verify(() => mockNetworkInfo.isConnected).called(1);
+      });
+    });
+
+    runOnlineTests(() {
+      test('should return Left(DataNotFoundFailure) when data is empty',
+          () async {
+        //arrange
+        when(() => mockGraphQLService.executeQuery(
+              getLaunchesByPaginationQuery,
+              variables: {"offset": testOffset, "limit": testLimit},
+            )).thenAnswer((_) async => mockQueryResult);
+        when(() => mockQueryResult.data).thenReturn({'launches': []});
+
+        //act
+        final result = await repositoryImpl.fetchLaunchesByPagination(
+          offset: testOffset,
+          limit: testLimit,
+        );
+
+        //assert
+        expect(result, isA<Left<Failure, List<LaunchEntity>>>());
+        expect(
+          result.left,
+          equals(const DataNotFoundFailure(message: "Launches not found")),
+        );
+        verify(() => mockNetworkInfo.isConnected).called(1);
+        verify(() => mockGraphQLService.executeQuery(
+              getLaunchesByPaginationQuery,
+              variables: {"offset": testOffset, "limit": testLimit},
+            )).called(1);
+        verify(() => mockQueryResult.data).called(1);
+        verifyNoMoreInteractions(mockNetworkInfo);
+        verifyNoMoreInteractions(mockGraphQLService);
+        verifyNoMoreInteractions(mockQueryResult);
+      });
+      test('should return Right([LaunchEntity]) when data is not empty',
+          () async {
+        //arrange
+        when(() => mockGraphQLService.executeQuery(
+              getLaunchesByPaginationQuery,
+              variables: {"offset": testOffset, "limit": testLimit},
+            )).thenAnswer((_) async => mockQueryResult);
+        when(() => mockQueryResult.data).thenReturn({
+          'launches': [testLaunchModel.toJson()]
+        });
+
+        //act
+        final result = await repositoryImpl.fetchLaunchesByPagination(
+          offset: testOffset,
+          limit: testLimit,
+        );
+
+        //assert
+        expect(result, isA<Right<Failure, List<LaunchEntity>>>());
+        expect(result.right, equals([testLaunchModel.toEntity()]));
+        verify(() => mockNetworkInfo.isConnected).called(1);
+        verify(() => mockGraphQLService.executeQuery(
+              getLaunchesByPaginationQuery,
+              variables: {"offset": testOffset, "limit": testLimit},
+            )).called(1);
+        verify(() => mockQueryResult.data).called(1);
+        verifyNoMoreInteractions(mockNetworkInfo);
+        verifyNoMoreInteractions(mockGraphQLService);
+        verifyNoMoreInteractions(mockQueryResult);
+      });
+
+      test('should return Left(GraphQLFailure) when GraphQLException is thrown',
+          () async {
+        //arrange
+        when(() => mockGraphQLService.executeQuery(
+              getLaunchesByPaginationQuery,
+              variables: {"offset": testOffset, "limit": testLimit},
+            )).thenThrow(GraphQLException(message: 'GraphQL error occurred'));
+
+        //act
+        final result = await repositoryImpl.fetchLaunchesByPagination(
+          offset: testOffset,
+          limit: testLimit,
+        );
+
+        //assert
+        expect(result, isA<Left<Failure, List<LaunchEntity>>>());
+        expect(result.left,
+            equals(const GraphQLFailure(message: 'GraphQL error occurred')));
+        verify(() => mockNetworkInfo.isConnected).called(1);
+        verify(() => mockGraphQLService.executeQuery(
+              getLaunchesByPaginationQuery,
+              variables: {"offset": testOffset, "limit": testLimit},
+            )).called(1);
+        verifyNoMoreInteractions(mockNetworkInfo);
+        verifyNoMoreInteractions(mockGraphQLService);
+      });
+    });
+  });
+
+   group('fetchCapsulesByPagination', () {
+    
+    test('Checks if the device is online', () async {
+      //arrange
+      when(() => mockNetworkInfo.isConnected).thenAnswer((_) async => false);
+
+      //act
+      await repositoryImpl.fetchCapsulesByPagination(
+        offset: testOffset,
+        limit: testLimit,
+      );
+
+      //assert
+      verify(() => mockNetworkInfo.isConnected).called(1);
+    });
+
+    runOfflineTests(() {
+      test(
+          'Should return Left(InternetConnectionFailure) when device is offline',
+          () async {
+        //act
+        final result = await repositoryImpl.fetchCapsulesByPagination(
+          offset: testOffset,
+          limit: testLimit,
+        );
+
+        //assert
+        expect(result, isA<Left<Failure, List<CapsuleEntity>>>());
+        expect(
+            result.left,
+            equals(const InternetConnectionFailure(
+                message: noInternetConnectionMessage)));
+        verify(() => mockNetworkInfo.isConnected).called(1);
+      });
+    });
+
+    runOnlineTests(() {
+      test('should return Left(DataNotFoundFailure) when data is empty',
+          () async {
+        //arrange
+        when(() => mockGraphQLService.executeQuery(
+              getCapsulesByPaginationQuery,
+              variables: {"offset": testOffset, "limit": testLimit},
+            )).thenAnswer((_) async => mockQueryResult);
+        when(() => mockQueryResult.data).thenReturn({'capsules': []});
+
+        //act
+        final result = await repositoryImpl.fetchCapsulesByPagination(
+          offset: testOffset,
+          limit: testLimit,
+        );
+
+        //assert
+        expect(result, isA<Left<Failure, List<CapsuleEntity>>>());
+        expect(
+          result.left,
+          equals(const DataNotFoundFailure(message: "Capsules not found")),
+        );
+        verify(() => mockNetworkInfo.isConnected).called(1);
+        verify(() => mockGraphQLService.executeQuery(
+              getCapsulesByPaginationQuery,
+              variables: {"offset": testOffset, "limit": testLimit},
+            )).called(1);
+        verify(() => mockQueryResult.data).called(1);
+        verifyNoMoreInteractions(mockNetworkInfo);
+        verifyNoMoreInteractions(mockGraphQLService);
+        verifyNoMoreInteractions(mockQueryResult);
+      });
+      test('should return Right([CapsuleEntity]) when data is not empty',
+          () async {
+        //arrange
+        when(() => mockGraphQLService.executeQuery(
+              getCapsulesByPaginationQuery,
+              variables: {"offset": testOffset, "limit": testLimit},
+            )).thenAnswer((_) async => mockQueryResult);
+        when(() => mockQueryResult.data).thenReturn({
+          'capsules': [testCapsuleModel.toJson()]
+        });
+
+        //act
+        final result = await repositoryImpl.fetchCapsulesByPagination(
+          offset: testOffset,
+          limit: testLimit,
+        );
+
+        //assert
+        expect(result, isA<Right<Failure, List<CapsuleEntity>>>());
+        expect(result.right, equals([testCapsuleModel.toEntity()]));
+        verify(() => mockNetworkInfo.isConnected).called(1);
+        verify(() => mockGraphQLService.executeQuery(
+              getCapsulesByPaginationQuery,
+              variables: {"offset": testOffset, "limit": testLimit},
+            )).called(1);
+        verify(() => mockQueryResult.data).called(1);
+        verifyNoMoreInteractions(mockNetworkInfo);
+        verifyNoMoreInteractions(mockGraphQLService);
+        verifyNoMoreInteractions(mockQueryResult);
+      });
+
+      test('should return Left(GraphQLFailure) when GraphQLException is thrown',
+          () async {
+        //arrange
+        when(() => mockGraphQLService.executeQuery(
+              getCapsulesByPaginationQuery,
+              variables: {"offset": testOffset, "limit": testLimit},
+            )).thenThrow(GraphQLException(message: 'GraphQL error occurred'));
+
+        //act
+        final result = await repositoryImpl.fetchCapsulesByPagination(
+          offset: testOffset,
+          limit: testLimit,
+        );
+
+        //assert
+        expect(result, isA<Left<Failure, List<CapsuleEntity>>>());
+        expect(result.left,
+            equals(const GraphQLFailure(message: 'GraphQL error occurred')));
+        verify(() => mockNetworkInfo.isConnected).called(1);
+        verify(() => mockGraphQLService.executeQuery(
+              getCapsulesByPaginationQuery,
+              variables: {"offset": testOffset, "limit": testLimit},
+            )).called(1);
         verifyNoMoreInteractions(mockNetworkInfo);
         verifyNoMoreInteractions(mockGraphQLService);
       });
