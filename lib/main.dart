@@ -75,7 +75,6 @@ class _SpaceXAppState extends State<SpaceXApp> {
       providers: [
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => _languageProvider),
-        // TODO: Add other providers as you implement them
        ChangeNotifierProvider(create: (_) => di.locator<CapsuleProvider>()),
        ChangeNotifierProvider(create: (_) => di.locator<RocketProvider>()),
        ChangeNotifierProvider(create: (_) => di.locator<LaunchProvider>()),
@@ -101,10 +100,13 @@ class _SpaceXAppState extends State<SpaceXApp> {
                   Locale('en', 'US'),
                   Locale('fr', 'FR'),
                 ],
-                home: const SplashScreen(),
+                initialRoute: '/',
                 getPages: [
                   GetPage(name: '/', page: () => const SplashScreen()),
-                  GetPage(name: '/dashboard', page: () => const DashboardScreen()),
+                  GetPage(name: '/dashboard', page: () {
+                    final screenIndex = (Get.arguments as int?) ?? 0;
+                    return DashboardScreen(screenIndex: screenIndex);
+                  }),
                 ],
               );
             },
