@@ -241,4 +241,87 @@ class SpaceXRepositoryImpl implements SpaceXRepository {
       return Left(GraphQLFailure(message: e.message));
     }
   }
+
+  // Fetch launches by pagination.
+
+  // Returns:
+  // Right([LaunchEntity]) on success.
+  // Left(InternetConnectionFailure) if there is no internet connection.
+  // Left(DataNotFoundFailure) if the launches are not found.
+  // Left(GraphQLFailure) if the GraphQLException occurs.
+  @override
+  Future<Either<Failure, List<LaunchEntity>>> fetchLaunchesByPagination({
+    required int offset,
+    required int limit,
+  }) async {
+    if (!await networkInfo.isConnected) {
+      return const Left(
+          InternetConnectionFailure(message: noInternetConnectionMessage));
+    }
+    try {
+      final result = await graphQLService.executeQuery(
+        getLaunchesByPaginationQuery,
+        variables: {"offset": offset, "limit": limit},
+      );
+
+      final launchesData = result.data?['launches'] as List<dynamic>?;
+      if (launchesData!.isEmpty) {
+        return const Left(DataNotFoundFailure(message: "Launches not found"));
+      }
+
+      final launcheModelList = launchesData
+          .map((json) => LaunchModel.fromJson(json as Map<String, dynamic>))
+          .toList();
+
+      final launcheEntityList =
+          launcheModelList.map((e) => e.toEntity()).toList();
+      return Right(launcheEntityList);
+    } on GraphQLException catch (e) {
+      return Left(GraphQLFailure(message: e.message));
+    }
+  }
+
+  // Fetch capsules  by pagination.
+
+  // Returns:
+  // Right([CapsuleEntity]) on success.
+  // Left(InternetConnectionFailure) if there is no internet connection.
+  // Left(DataNotFoundFailure) if the capsules are not found.
+  // Left(GraphQLFailure) if the GraphQLException occurs.
+  @override
+  Future<Either<Failure, List<CapsuleEntity>>> fetchCapsulesByPagination({
+    required int offset,
+    required int limit,
+  }) async {
+    if (!await networkInfo.isConnected) {
+      return const Left(
+          InternetConnectionFailure(message: noInternetConnectionMessage));
+    }
+
+    try {
+      final result = await graphQLService.executeQuery(
+        getCapsulesByPaginationQuery,
+        variables: {
+          "offset": offset,
+          "limit": limit,
+        },
+      );
+
+      final capsulesData = result.data?['capsules'] as List<dynamic>?;
+      if (capsulesData!.isEmpty) {
+        return const Left(DataNotFoundFailure(message: "Capsules not found"));
+      }
+
+      final capsuleModelList = capsulesData
+          .map((json) => CapsuleModel.fromJson(json as Map<String, dynamic>))
+          .toList();
+
+      final capsuleEntityList =
+          capsuleModelList.map((e) => e.toEntity()).toList();
+
+      return Right(capsuleEntityList);
+    } on GraphQLException catch (e) {
+      return Left(GraphQLFailure(message: e.message));
+    }
+  }
 }
