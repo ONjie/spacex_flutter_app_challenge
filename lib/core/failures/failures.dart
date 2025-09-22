@@ -1,5 +1,8 @@
 import 'package:equatable/equatable.dart';
 
+
+// Base class for all failures in the application.
+// Extends [Equatable] to allow easy comparison in tests and state management.
 abstract class Failure extends Equatable {
   final String message;
 
