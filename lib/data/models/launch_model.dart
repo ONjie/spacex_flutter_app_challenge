@@ -9,19 +9,15 @@ class LaunchModel extends Equatable {
     required this.id,
     required this.details,
     required this.launchDateLocal,
-    required this.launchYear,
     required this.missionName,
     required this.rocketName,
-    required this.rocketType,
     required this.upcoming,
   });
 
   final String id;
   final String details;
   final DateTime launchDateLocal;
-  final String launchYear;
   final String missionName;
-  final String rocketType;
   final String rocketName;
   final bool upcoming;
 
@@ -31,10 +27,8 @@ class LaunchModel extends Equatable {
         id: json['id'] as String,
         details: json['details'] ?? 'No details available',
         launchDateLocal: DateTime.parse(json['launch_date_local']),
-        launchYear: json['launch_year'] as String,
         missionName: json['mission_name'] as String,
         rocketName: json['rocket']['rocket_name'] as String,
-        rocketType: json['rocket']['rocket_type'] as String,
         upcoming: json['upcoming'] as bool,
       );
 
@@ -44,10 +38,9 @@ class LaunchModel extends Equatable {
         "id": id,
         "details": details,
         "launch_date_local": launchDateLocal.toIso8601String(),
-        "launch_year": launchYear,
         "mission_name": missionName,
         "upcoming": upcoming,
-        "rocket": {"rocket_name": rocketName, "rocket_type": rocketType}
+        "rocket": {"rocket_name": rocketName,}
       };
 
 
@@ -57,9 +50,7 @@ class LaunchModel extends Equatable {
         id: id,
         details: details,
         launchDateLocal: launchDateLocal,
-        launchYear: launchYear,
         missionName: missionName,
-        rocketType: rocketType,
         rocketName: rocketName,
         upcoming: upcoming,
       );
@@ -69,9 +60,7 @@ class LaunchModel extends Equatable {
         id,
         details,
         launchDateLocal,
-        launchYear,
         missionName,
-        rocketType,
         rocketName,
         upcoming,
       ];
