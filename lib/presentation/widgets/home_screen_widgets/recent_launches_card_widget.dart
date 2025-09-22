@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:spacex_flutter_app/domain/entities/launch_entity.dart';
+import 'package:spacex_flutter_app/presentation/screens/dashboard_screen.dart';
 
 class RecentLaunchesCardWidget extends StatelessWidget {
   const RecentLaunchesCardWidget({super.key, required this.launches});
@@ -24,11 +26,26 @@ class RecentLaunchesCardWidget extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Recent Launches',
-                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                      fontSize: 22,
-                    ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Recent Launches',
+                    style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                          fontSize: 22,
+                        ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Get.to(() => const DashboardScreen(screenIndex: 3));
+                    },
+                    child: Text('View All',
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineLarge
+                            ?.copyWith(fontSize: 20, color: Colors.blue)),
+                  ),
+                ],
               ),
               const SizedBox(height: 10),
               ListView.builder(
@@ -52,7 +69,8 @@ class RecentLaunchesCardWidget extends StatelessWidget {
                     ),
                     trailing: const Icon(Icons.arrow_forward_ios, size: 18),
                     onTap: () {
-                      //TODO: Handle tap
+                      Get.to(() => const DashboardScreen(screenIndex: 3));
+                      //Get.to(() => DashboardScreen(screenIndex: 2));
                     },
                   );
                 },
