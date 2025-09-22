@@ -24,11 +24,12 @@ const String getRocketsQuery = '''
     active
     boosters
     description
-    country
     success_rate_pct
     first_flight
     cost_per_launch
-    company
+    engines{
+    number
+    }
   }
  }
 ''';
@@ -56,11 +57,12 @@ const String getRocketByIdQuery = '''
     active
     boosters
     description
-    country
     success_rate_pct
     first_flight
     cost_per_launch
-    company
+    engines{
+    number
+    }
    }
  }
 ''';
