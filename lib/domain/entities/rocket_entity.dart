@@ -1,13 +1,11 @@
 import 'package:equatable/equatable.dart';
 
 class RocketEntity extends Equatable {
- const RocketEntity({
+  const RocketEntity({
     required this.id,
     required this.active,
     required this.boosters,
-    required this.company,
     required this.costPerLaunch,
-    required this.country,
     required this.description,
     required this.diameterInFeet,
     required this.diameterInMeters,
@@ -19,7 +17,8 @@ class RocketEntity extends Equatable {
     required this.name,
     required this.stages,
     required this.successRate,
-    required this.type
+    required this.type,
+    required this.numberOfEngines,
   });
 
   final String id;
@@ -38,28 +37,46 @@ class RocketEntity extends Equatable {
   final int massInLb;
   final DateTime firstFlight;
   final String description;
-  final String company;
-  final String country;
-  
+  final int numberOfEngines;
+
   @override
   List<Object?> get props => [
-    id,
-    name,
-    type,
-    active,
-    stages,
-    boosters,
-    costPerLaunch,
-    successRate,
-    heightInFeet,
-    heightInMeters,
-    diameterInFeet,
-    diameterInMeters,
-    massInKg,
-    massInLb,
-    firstFlight,
-    description,
-    company,
-    country
-  ];
+        id,
+        name,
+        type,
+        active,
+        stages,
+        boosters,
+        costPerLaunch,
+        successRate,
+        heightInFeet,
+        heightInMeters,
+        diameterInFeet,
+        diameterInMeters,
+        massInKg,
+        massInLb,
+        firstFlight,
+        description,
+        numberOfEngines
+      ];
+
+  static RocketEntity rocketDummy = RocketEntity(
+    id: 'id',
+    active: false,
+    boosters: 1,
+    costPerLaunch: 30000,
+    description: 'description',
+    diameterInFeet: 50,
+    diameterInMeters: 30,
+    firstFlight: DateTime.now(),
+    heightInFeet: 50,
+    heightInMeters: 30,
+    massInKg: 300,
+    massInLb: 150,
+    name: 'name',
+    stages: 1,
+    successRate: 90,
+    type: 'type',
+    numberOfEngines: 2,
+  );
 }
