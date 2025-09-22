@@ -105,8 +105,7 @@ class _SplashScreenState extends State<SplashScreen>
 
   void _navigateToHome() {
     Future.delayed(const Duration(seconds: 4), () {
-      // TODO: Navigate to main screen
-     Get.toNamed('/dashboard');
+     Get.toNamed('/dashboard', arguments: 0);
     });
   }
 
